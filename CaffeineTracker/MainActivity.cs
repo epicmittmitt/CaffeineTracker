@@ -30,10 +30,10 @@ namespace CaffeineTracker
 
 			var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar1);
 			SetActionBar(toolbar);
-			ActionBar.Title = "Caffiene Tracker";
+			ActionBar.Title = "Caffeiene Tracker";
 		}
 
-		private Drink[] LoadDrinks()
+		internal Drink[] LoadDrinks()
 		{
 			var _csv = Assets.Open("Drinks.csv");
 			var reader = new StreamReader(_csv);
@@ -42,7 +42,7 @@ namespace CaffeineTracker
 			foreach (var line in csv)
 			{
 				var a = line.Split('~');
-				drinks.Add(Drink.Parse(a));
+				drinks.Add(Drink.Deserialize(a));
 			}
 			return drinks.ToArray();
 		}
@@ -56,7 +56,7 @@ namespace CaffeineTracker
 
 		public override bool OnOptionsItemSelected(IMenuItem item)
 		{
-			if (item.TitleFormatted.ToString()=="Add an Image")
+			if (item.TitleFormatted.ToString() == "Add an Image")
 			{
 				StartActivityForResult(typeof(Activity1), 0);
 			}
@@ -78,9 +78,9 @@ namespace CaffeineTracker
 				oldMatches = newMatches;
 				if (newMatches.Length <= 3) break;
 			}
-			var bestMatch = oldMatches.OrderBy(_ => _.Name.Length).First();
-			FindViewById<TextView>(Resource.Id.textView6).Text = bestMatch.Name;
-			FindViewById<TextView>(Resource.Id.textView3).Text = (bestMatch.Caffeine / bestMatch.Size).ToString();
+			var intent = new Intent(this, typeof(AddDrink));
+			intent.PutExtra("data", oldMatches.Select(_ => _.Name).ToArray());
+			StartActivityForResult(intent, 1);
 		}
 
 		protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)

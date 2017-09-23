@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Runtime.Serialization;
 
 namespace CaffeineTracker
 {
@@ -18,11 +19,7 @@ namespace CaffeineTracker
 		public double Size { get; set; }
 		public double Caffeine { get; set; }
 
-		public static Drink Parse(string[] attributes) => new Drink
-		{
-			Name = attributes[0],
-			Size = double.Parse(attributes[1]),
-			Caffeine = double.Parse(attributes[2])
-		};
+		internal static string[] Serialize(Drink d) => new[] { d.Name, d.Size.ToString(), d.Caffeine.ToString() };
+		internal static Drink Deserialize(string[] s) => new Drink { Name = s[0], Size = double.Parse(s[1]), Caffeine = double.Parse(s[2]) };
 	}
 }

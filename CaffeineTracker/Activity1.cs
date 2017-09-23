@@ -16,7 +16,7 @@ using Camera = Android.Hardware.Camera;
 
 namespace CaffeineTracker
 {
-	[Activity(Label = "Activity1", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+	[Activity(Label = "Add an Image", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class Activity1 : Activity, TextureView.ISurfaceTextureListener, Camera.IShutterCallback, Camera.IPictureCallback
 	{
 		private Camera _camera;
