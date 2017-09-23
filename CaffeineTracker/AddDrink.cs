@@ -14,7 +14,8 @@ using System.IO;
 
 namespace CaffeineTracker
 {
-	[Activity(Label = "Add Drink", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, NoHistory = true, Theme ="@android:style/Theme.DeviceDefault.Dialog.NoActionBar")]
+	[Activity(Label = "Add Drink", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, NoHistory = true, 
+		Theme = "@android:style/Theme.DeviceDefault.DialogWhenLarge.NoActionBar")]
 	public class AddDrink : Activity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -23,19 +24,30 @@ namespace CaffeineTracker
 			SetContentView(Resource.Layout.AddDrinkDialog);
 
 			var data = Intent.GetStringArrayExtra("data");
+			if (data.Length == 0)
+			{
+				SetResult(Result.Canceled);
+				Finish();
+				return;
+			}
 			var drinks = LoadDrinks();
 			var items = data.Select(_ => drinks.First(x => x.Name == _)).ToArray();
-			var la = FindViewById<ListView>(Resource.Id.listView1);
-			la.Adapter = new LVAdapter(this, items);
 
-			la.ItemClick += (s, e) =>
+			void SubmitDialog(int index)
 			{
-				var d = items[e.Position];
+				var d = items[index];
 				var intent = new Intent(this, typeof(MainActivity));
 				intent.PutExtra("data", Drink.Serialize(d));
 				SetResult(Result.Ok, intent);
 				Finish();
-			};
+			}
+
+			if (data.Length == 1) SubmitDialog(0);
+
+			var la = FindViewById<ListView>(Resource.Id.listView1);
+			la.Adapter = new LVAdapter(this, items);
+
+			la.ItemClick += (s, e) => SubmitDialog(e.Position);
 		}
 
 		internal Drink[] LoadDrinks()

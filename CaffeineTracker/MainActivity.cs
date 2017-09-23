@@ -78,8 +78,9 @@ namespace CaffeineTracker
 				oldMatches = newMatches;
 				if (newMatches.Length <= 3) break;
 			}
+			if (oldMatches.Length > 100) oldMatches = null;
 			var intent = new Intent(this, typeof(AddDrink));
-			intent.PutExtra("data", oldMatches.Select(_ => _.Name).Take(10).ToArray());
+			intent.PutExtra("data", oldMatches is null ? new string[0] : oldMatches.Select(_ => _.Name).Take(10).ToArray());
 			StartActivityForResult(intent, 1);
 		}
 
