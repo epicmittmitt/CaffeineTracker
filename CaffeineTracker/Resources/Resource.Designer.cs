@@ -63,11 +63,8 @@ namespace CaffeineTracker
 			// aapt resource value: 0x7f060000
 			public const int backButton = 2131099648;
 			
-			// aapt resource value: 0x7f06000d
-			public const int imageView1 = 2131099661;
-			
-			// aapt resource value: 0x7f060005
-			public const int linearLayout1 = 2131099653;
+			// aapt resource value: 0x7f060004
+			public const int linearLayout1 = 2131099652;
 			
 			// aapt resource value: 0x7f060007
 			public const int linearLayout2 = 2131099655;
@@ -78,14 +75,14 @@ namespace CaffeineTracker
 			// aapt resource value: 0x7f06000a
 			public const int linearLayout4 = 2131099658;
 			
-			// aapt resource value: 0x7f060003
-			public const int listView1 = 2131099651;
-			
-			// aapt resource value: 0x7f06000e
-			public const int openCamera = 2131099662;
-			
 			// aapt resource value: 0x7f060002
-			public const int textView1 = 2131099650;
+			public const int listView1 = 2131099650;
+			
+			// aapt resource value: 0x7f06000d
+			public const int openCamera = 2131099661;
+			
+			// aapt resource value: 0x7f060005
+			public const int textView1 = 2131099653;
 			
 			// aapt resource value: 0x7f060009
 			public const int textView3 = 2131099657;
@@ -102,8 +99,8 @@ namespace CaffeineTracker
 			// aapt resource value: 0x7f060001
 			public const int textureView1 = 2131099649;
 			
-			// aapt resource value: 0x7f060004
-			public const int toolbar1 = 2131099652;
+			// aapt resource value: 0x7f060003
+			public const int toolbar1 = 2131099651;
 			
 			static Id()
 			{

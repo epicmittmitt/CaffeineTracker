@@ -25,10 +25,10 @@ namespace CaffeineTracker
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			RequestWindowFeature(WindowFeatures.NoTitle);
-			base.OnCreate(savedInstanceState);
 			Window.AddFlags(WindowManagerFlags.ForceNotFullscreen);
 			SetContentView(Resource.Layout.Main);
-
+			base.OnCreate(savedInstanceState);
+			
 			var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar1);
 			SetActionBar(toolbar);
 			ActionBar.Title = "Caffeine Tracker";
@@ -55,7 +55,6 @@ namespace CaffeineTracker
 			if (requestCode == 1)
 			{
 				
-
 			}
 			base.OnActivityResult(requestCode, resultCode, data);
 		}

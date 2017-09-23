@@ -94,9 +94,4 @@
         android:id="@+id/textView5"
         android:textSize="10dp"
         android:padding="20dp" />
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView1"
-        android:padding="5dp" />
 </LinearLayout>
