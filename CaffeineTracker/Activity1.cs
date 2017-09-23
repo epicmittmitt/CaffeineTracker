@@ -117,19 +117,22 @@ namespace CaffeineTracker
 
 		protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
 		{
+			base.OnActivityResult(requestCode, resultCode, data);
 			if (resultCode == Result.Canceled)
 			{
 				var ad = new AlertDialog.Builder(this);
 				ad.SetMessage("The beverage you photographed could not be identified.\n\nTry another angle or better lighting.");
 				ad.SetTitle("Unknown Beverage");
 				ad.SetPositiveButton("Okay", delegate {
-					SetResult(requestCode == 0 ? Result.Canceled : resultCode, data);
+					SetResult(Result.Canceled, data);
 					Finish();
-					base.OnActivityResult(requestCode, resultCode, data);
 				});
 				ad.SetCancelable(false);
 				ad.Create().Show();
+				return;
 			}
+			SetResult(Result.Ok, data);
+			Finish();
 		}
 
 		internal Drink[] LoadDrinks()
