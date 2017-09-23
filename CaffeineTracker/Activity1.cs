@@ -17,7 +17,7 @@ using Camera = Android.Hardware.Camera;
 namespace CaffeineTracker
 {
 	[Activity(Label = "Activity1", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-	public class Activity1 : Activity, TextureView.ISurfaceTextureListener, Camera.IAutoFocusCallback
+	public class Activity1 : Activity, TextureView.ISurfaceTextureListener
 	{
 		private Camera _camera;
 		private TextureView _textureView;
@@ -37,7 +37,12 @@ namespace CaffeineTracker
 		public void OnSurfaceTextureAvailable(SurfaceTexture surface, int w, int h)
 		{
 			_camera = Camera.Open();
-			_camera.AutoFocus(this);
+			Camera.Parameters param = _camera.GetParameters();
+			if (param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeContinuousVideo))
+			{
+				param.FocusMode = Camera.Parameters.FocusModeContinuousVideo;
+			}
+			_camera.SetParameters(param);
 			_textureView.LayoutParameters = new FrameLayout.LayoutParams(w, w);
 			_camera.SetPreviewTexture(surface);
 			_camera.StartPreview();
@@ -47,7 +52,6 @@ namespace CaffeineTracker
 
 		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
 		{
-			_camera.CancelAutoFocus();
 			_camera.StopPreview();
 			_camera.Release();
 
@@ -64,7 +68,5 @@ namespace CaffeineTracker
 		{
 
 		}
-
-		void Camera.IAutoFocusCallback.OnAutoFocus(bool success, Camera camera) { }
 	}
 }
