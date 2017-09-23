@@ -21,14 +21,14 @@ namespace CaffeineTracker
 	{
 		private Camera _camera;
 		private TextureView _textureView;
-		//private bool readyToDispose = false;
+		private bool manualFocus = false;
 		private bool stopImaging;
 
 		protected override void OnCreate(Bundle bundle)
 		{
 			RequestWindowFeature(WindowFeatures.NoTitle);
 			base.OnCreate(bundle);
-
+			Window.AddFlags(WindowManagerFlags.Fullscreen);
 			SetContentView(Resource.Layout.Activity1);
 			_textureView = FindViewById<TextureView>(Resource.Id.textureView1);
 			_textureView.SurfaceTextureListener = this;
@@ -39,6 +39,18 @@ namespace CaffeineTracker
 				stopImaging = true;
 				_camera.TakePicture(this, this, this);
 			};
+
+			_textureView.Click += delegate {
+				_camera.CancelAutoFocus();
+				Camera.Parameters param = _camera.GetParameters();
+				if (!manualFocus && param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeFixed))
+				{
+					param.FocusMode = Camera.Parameters.FocusModeFixed;
+				}
+				manualFocus = !manualFocus;
+				_camera.SetParameters(param);
+				Toast.MakeText(this, "Manual Focus " + (manualFocus ? "Enabled" : "Disabled"), ToastLength.Short).Show();
+			};
 		}
 
 		public void OnSurfaceTextureAvailable(SurfaceTexture surface, int w, int h)
@@ -46,11 +58,11 @@ namespace CaffeineTracker
 			if (stopImaging) return;
 			_camera = Camera.Open();
 			Camera.Parameters param = _camera.GetParameters();
-			if (param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeContinuousVideo))
+			if (!manualFocus && param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeContinuousPicture))
 			{
-				param.FocusMode = Camera.Parameters.FocusModeContinuousVideo;
+				param.FocusMode = Camera.Parameters.FocusModeContinuousPicture;
 			}
-			var dimensions = 480 * 720;
+			var dimensions = 480 * 768;
 			var size = param.SupportedPictureSizes.Where(_ => _.Width * _.Height < dimensions).OrderByDescending(_ => _.Width * _.Height < dimensions).First();
 			param.SetPictureSize(size.Width, size.Height);
 

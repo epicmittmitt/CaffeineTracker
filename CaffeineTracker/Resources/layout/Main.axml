@@ -3,6 +3,13 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    <Toolbar
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        android:minWidth="25px"
+        android:id="@+id/toolbar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -18,28 +25,68 @@
             android:textSize="24dp"
             android:layout_marginRight="0.0dp" />
         <TextView
-            android:text="XYZ mg"
-            android:layout_width="89.0dp"
+            android:text="0 mg"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/textView2"
-            android:textSize="24dp" />
+            android:id="@+id/textView6" />
     </LinearLayout>
-    <TextView
-        android:text="Recommended daily intake: 400 mg"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:gravity="center"
-        android:padding="4dp"
-        android:textSize="14dp" />
-    <TextView
-        android:text="Estimated Caffeine Left in Body: XYZ mg"
+        android:id="@+id/linearLayout2"
+        android:gravity="center">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout3">
+            <TextView
+                android:text="Est. Caffeine in Body:"
+                android:id="@+id/textView3"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:padding="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <TextView
+                android:text="0 mg"
+                android:id="@+id/textView3"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:padding="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:gravity="center"
-        android:textSize="14dp"
-        android:padding="3dp" />
+        android:id="@+id/linearLayout4"
+        android:gravity="center">
+        <TextView
+            android:text="Time remaining:"
+            android:id="@+id/textView4"
+            android:gravity="clip_horizontal"
+            android:padding="4dp"
+            android:textSize="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="0 secs"
+            android:id="@+id/textView4"
+            android:gravity="clip_horizontal"
+            android:padding="4dp"
+            android:textSize="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
     <TextView
         android:text="Disclaimer: The information provided is not indended to be a substitute for professional medical advice. For further questions, please consult a medical professional."
         android:layout_width="match_parent"
@@ -47,13 +94,9 @@
         android:id="@+id/textView5"
         android:textSize="10dp"
         android:padding="20dp" />
-    <Button
-        android:id="@+id/myButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/openCamera" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView1" />
+        android:id="@+id/imageView1"
+        android:padding="5dp" />
 </LinearLayout>

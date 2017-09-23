@@ -13,6 +13,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using System.Text.RegularExpressions;
 
 namespace CaffeineTracker
 {
@@ -29,34 +30,13 @@ namespace CaffeineTracker
 			_client = new WebClient();
 		}
 
-		public async Task<string[]> GetResponse(byte[] image)
-		{
-			var responses = new string[2];
-			var reqs = BuildRequest(ToBase64(image));
-			for (var i = 0; i < responses.Length; i++)
-			{
-				responses[i] = await _client.UploadStringTaskAsync(Endpoint + _apiKey, reqs[i]);
-			}
-			return responses;
-		}
+		public async Task<string> GetResponse(string request) => await _client.UploadStringTaskAsync(Endpoint + _apiKey, request);
 
-		private string[] BuildRequest(string base64)
-		{
-			var req = new[] {
-				"{\"requests\":[{\"image\":{\"content\":\"" + base64 + "\"},\"features\":[{\"type\":\"LOGO_DETECTION\"}]}]}",
-				"{\"requests\":[{\"image\":{\"content\":\"" + base64 + "\"},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}"
-			};
-			return req;
-		}
+		public string[] BuildRequest(string base64) => new[] {
+			"{\"requests\":[{\"image\":{\"content\":\"" + base64 + "\"},\"features\":[{\"type\":\"LOGO_DETECTION\"}]}]}",
+			"{\"requests\":[{\"image\":{\"content\":\"" + base64 + "\"},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}"
+		};
 
-		private string ToBase64(Image image)
-		{
-			var bytes = image.ToArray<byte>();
-			return Convert.ToBase64String(bytes);
-		}
-		private string ToBase64(byte[] image)
-		{
-			return Convert.ToBase64String(image);
-		}
+		public string ToBase64(byte[] image) => Convert.ToBase64String(image);
 	}
 }

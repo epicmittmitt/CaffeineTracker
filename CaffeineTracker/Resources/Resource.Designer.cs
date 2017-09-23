@@ -41,38 +41,66 @@ namespace CaffeineTracker
 			}
 		}
 		
+		public partial class Drawable
+		{
+			
+			// aapt resource value: 0x7f020000
+			public const int ic_add_a_photo_white_24dp = 2130837504;
+			
+			static Drawable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Drawable()
+			{
+			}
+		}
+		
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int backButton = 2130968576;
+			// aapt resource value: 0x7f060000
+			public const int backButton = 2131099648;
 			
-			// aapt resource value: 0x7f040009
-			public const int imageView1 = 2130968585;
+			// aapt resource value: 0x7f06000c
+			public const int imageView1 = 2131099660;
 			
-			// aapt resource value: 0x7f040002
-			public const int linearLayout1 = 2130968578;
+			// aapt resource value: 0x7f060003
+			public const int linearLayout1 = 2131099651;
 			
-			// aapt resource value: 0x7f040008
-			public const int myButton = 2130968584;
+			// aapt resource value: 0x7f060006
+			public const int linearLayout2 = 2131099654;
 			
-			// aapt resource value: 0x7f040003
-			public const int textView1 = 2130968579;
+			// aapt resource value: 0x7f060007
+			public const int linearLayout3 = 2131099655;
 			
-			// aapt resource value: 0x7f040004
-			public const int textView2 = 2130968580;
+			// aapt resource value: 0x7f060009
+			public const int linearLayout4 = 2131099657;
 			
-			// aapt resource value: 0x7f040006
-			public const int textView3 = 2130968582;
+			// aapt resource value: 0x7f06000d
+			public const int openCamera = 2131099661;
 			
-			// aapt resource value: 0x7f040005
-			public const int textView4 = 2130968581;
+			// aapt resource value: 0x7f060004
+			public const int textView1 = 2131099652;
 			
-			// aapt resource value: 0x7f040007
-			public const int textView5 = 2130968583;
+			// aapt resource value: 0x7f060008
+			public const int textView3 = 2131099656;
 			
-			// aapt resource value: 0x7f040001
-			public const int textureView1 = 2130968577;
+			// aapt resource value: 0x7f06000a
+			public const int textView4 = 2131099658;
+			
+			// aapt resource value: 0x7f06000b
+			public const int textView5 = 2131099659;
+			
+			// aapt resource value: 0x7f060005
+			public const int textView6 = 2131099653;
+			
+			// aapt resource value: 0x7f060001
+			public const int textureView1 = 2131099649;
+			
+			// aapt resource value: 0x7f060002
+			public const int toolbar1 = 2131099650;
 			
 			static Id()
 			{
@@ -87,11 +115,11 @@ namespace CaffeineTracker
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7f020000
-			public const int Activity1 = 2130837504;
+			// aapt resource value: 0x7f030000
+			public const int Activity1 = 2130903040;
 			
-			// aapt resource value: 0x7f020001
-			public const int Main = 2130837505;
+			// aapt resource value: 0x7f030001
+			public const int Main = 2130903041;
 			
 			static Layout()
 			{
@@ -103,17 +131,33 @@ namespace CaffeineTracker
 			}
 		}
 		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f050000
+			public const int Menu1 = 2131034112;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
+			{
+			}
+		}
+		
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f030000
-			public const int app_name = 2130903040;
+			// aapt resource value: 0x7f040000
+			public const int app_name = 2130968576;
 			
-			// aapt resource value: 0x7f030001
-			public const int openCamera = 2130903041;
+			// aapt resource value: 0x7f040001
+			public const int openCamera = 2130968577;
 			
-			// aapt resource value: 0x7f030002
-			public const int takePicture = 2130903042;
+			// aapt resource value: 0x7f040002
+			public const int takePicture = 2130968578;
 			
 			static String()
 			{
