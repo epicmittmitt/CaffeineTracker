@@ -6,6 +6,7 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Hardware;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -16,7 +17,7 @@ using Camera = Android.Hardware.Camera;
 namespace CaffeineTracker
 {
 	[Activity(Label = "Activity1", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-	public class Activity1 : Activity, TextureView.ISurfaceTextureListener
+	public class Activity1 : Activity, TextureView.ISurfaceTextureListener, Camera.IAutoFocusCallback
 	{
 		private Camera _camera;
 		private TextureView _textureView;
@@ -25,36 +26,28 @@ namespace CaffeineTracker
 		{
 			base.OnCreate(bundle);
 
-			_textureView = new TextureView(this);
-			_textureView.SurfaceTextureListener = this;
+			_textureView = new TextureView(this)
+			{
+				SurfaceTextureListener = this
+			};
 
 			SetContentView(_textureView);
 		}
 
-		public void OnSurfaceTextureAvailable(Android.Graphics.SurfaceTexture surface, int w, int h)
+		public void OnSurfaceTextureAvailable(SurfaceTexture surface, int w, int h)
 		{
 			_camera = Camera.Open();
-
-			_textureView.LayoutParameters = new FrameLayout.LayoutParams(h, w);
-
-			try
-			{
-				_camera.SetPreviewTexture(surface);
-				_camera.StartPreview();
-			}
-			catch (Java.IO.IOException ex)
-			{
-				Console.WriteLine(ex.Message);
-
-			}
-
+			_camera.AutoFocus(this);
+			_textureView.LayoutParameters = new FrameLayout.LayoutParams(w, w);
+			_camera.SetPreviewTexture(surface);
+			_camera.StartPreview();
 			_textureView.Rotation = 90.0f;
-			_textureView.TranslationX = -300f;
-
+			_textureView.ScaleX = (float)h / w;
 		}
 
-		public bool OnSurfaceTextureDestroyed(Android.Graphics.SurfaceTexture surface)
+		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
 		{
+			_camera.CancelAutoFocus();
 			_camera.StopPreview();
 			_camera.Release();
 
@@ -71,5 +64,7 @@ namespace CaffeineTracker
 		{
 
 		}
+
+		void Camera.IAutoFocusCallback.OnAutoFocus(bool success, Camera camera) { }
 	}
 }
