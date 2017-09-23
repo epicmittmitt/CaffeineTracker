@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">CaffeineTracker</string>
-  <string name="openCamera"> </string>
+  <string name="openCamera">Add Record</string>
+  <string name="takePicture">Take Picture</string>
 </resources>

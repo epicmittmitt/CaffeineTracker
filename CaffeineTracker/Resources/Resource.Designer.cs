@@ -91,6 +91,9 @@ namespace CaffeineTracker
 			// aapt resource value: 0x7f030001
 			public const int openCamera = 2130903041;
 			
+			// aapt resource value: 0x7f030002
+			public const int takePicture = 2130903042;
+			
 			static String()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
