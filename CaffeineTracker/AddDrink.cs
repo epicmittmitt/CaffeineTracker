@@ -14,7 +14,7 @@ using System.IO;
 
 namespace CaffeineTracker
 {
-	[Activity(Label = "Add Drink", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, NoHistory = true)]
+	[Activity(Label = "Add Drink", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, NoHistory = true, Theme ="@android:style/Theme.DeviceDefault.Dialog.NoActionBar")]
 	public class AddDrink : Activity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)

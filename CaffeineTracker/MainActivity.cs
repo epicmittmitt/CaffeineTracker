@@ -30,7 +30,7 @@ namespace CaffeineTracker
 
 			var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar1);
 			SetActionBar(toolbar);
-			ActionBar.Title = "Caffeiene Tracker";
+			ActionBar.Title = "Caffeine Tracker";
 		}
 
 		internal Drink[] LoadDrinks()
@@ -79,7 +79,7 @@ namespace CaffeineTracker
 				if (newMatches.Length <= 3) break;
 			}
 			var intent = new Intent(this, typeof(AddDrink));
-			intent.PutExtra("data", oldMatches.Select(_ => _.Name).ToArray());
+			intent.PutExtra("data", oldMatches.Select(_ => _.Name).Take(10).ToArray());
 			StartActivityForResult(intent, 1);
 		}
 
@@ -87,7 +87,8 @@ namespace CaffeineTracker
 		{
 			if (resultCode == Result.Ok)
 			{
-				ParseResponse(data.GetByteArrayExtra("image"));
+				if (requestCode == 0) ParseResponse(data.GetByteArrayExtra("image"));
+				else if (requestCode == 1) ;
 			}
 			base.OnActivityResult(requestCode, resultCode, data);
 		}
@@ -106,13 +107,13 @@ namespace CaffeineTracker
 			}
 			for (var height = 1; height < bounds.Height; height++)
 			{
-				for (int width = 1; width < bounds.Width; width++)
+				for (var width = 1; width < bounds.Width; width++)
 				{
-					int cost = (s[height - 1] == t[width - 1]) ? 0 : 1;
-					int insertion = matrix[height, width - 1] + 1;
-					int deletion = matrix[height - 1, width] + 1;
-					int substitution = matrix[height - 1, width - 1] + cost;
-					int distance = Math.Min(insertion, Math.Min(deletion, substitution));
+					var cost = (s[height - 1] == t[width - 1]) ? 0 : 1;
+					var insertion = matrix[height, width - 1] + 1;
+					var deletion = matrix[height - 1, width] + 1;
+					var substitution = matrix[height - 1, width - 1] + cost;
+					var distance = Math.Min(insertion, Math.Min(deletion, substitution));
 					if (height > 1 && width > 1 && s[height - 1] == t[width - 2] && s[height - 2] == t[width - 1])
 					{
 						distance = Math.Min(distance, matrix[height - 2, width - 2] + cost);
