@@ -15,61 +15,61 @@ using Camera = Android.Hardware.Camera;
 
 namespace CaffeineTracker
 {
-    [Activity(Label = "Activity1")]
-    public class Activity1 : Activity,TextureView.ISurfaceTextureListener
-    {
-        private Camera _camera;
-        private TextureView _textureView;
+	[Activity(Label = "Activity1", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+	public class Activity1 : Activity, TextureView.ISurfaceTextureListener
+	{
+		private Camera _camera;
+		private TextureView _textureView;
 
-        protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
+		protected override void OnCreate(Bundle bundle)
+		{
+			base.OnCreate(bundle);
 
-            _textureView = new TextureView(this);
-            _textureView.SurfaceTextureListener = this;
+			_textureView = new TextureView(this);
+			_textureView.SurfaceTextureListener = this;
 
-            SetContentView(_textureView);
-        }
+			SetContentView(_textureView);
+		}
 
-        public void OnSurfaceTextureAvailable(Android.Graphics.SurfaceTexture surface, int w, int h)
-        {
-            _camera = Camera.Open();
-            
-            _textureView.LayoutParameters = new FrameLayout.LayoutParams(h, w);
+		public void OnSurfaceTextureAvailable(Android.Graphics.SurfaceTexture surface, int w, int h)
+		{
+			_camera = Camera.Open();
 
-            try
-            {
-                _camera.SetPreviewTexture(surface);
-                _camera.StartPreview();
-            }
-            catch (Java.IO.IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                
-            }
+			_textureView.LayoutParameters = new FrameLayout.LayoutParams(h, w);
 
-            _textureView.Rotation = 90.0f;
-            _textureView.TranslationX = -300f;
+			try
+			{
+				_camera.SetPreviewTexture(surface);
+				_camera.StartPreview();
+			}
+			catch (Java.IO.IOException ex)
+			{
+				Console.WriteLine(ex.Message);
 
-        }
+			}
 
-        public bool OnSurfaceTextureDestroyed(Android.Graphics.SurfaceTexture surface)
-        {
-            _camera.StopPreview();
-            _camera.Release();
+			_textureView.Rotation = 90.0f;
+			_textureView.TranslationX = -300f;
 
-            return true;
+		}
 
-        }
+		public bool OnSurfaceTextureDestroyed(Android.Graphics.SurfaceTexture surface)
+		{
+			_camera.StopPreview();
+			_camera.Release();
 
-        public void OnSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height)
-        {
-          
-        }
+			return true;
 
-        public void OnSurfaceTextureUpdated(SurfaceTexture surface)
-        {
-           
-        }
-    }
+		}
+
+		public void OnSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height)
+		{
+
+		}
+
+		public void OnSurfaceTextureUpdated(SurfaceTexture surface)
+		{
+
+		}
+	}
 }
