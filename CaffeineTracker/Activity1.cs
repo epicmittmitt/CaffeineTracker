@@ -35,7 +35,7 @@ namespace CaffeineTracker
         {
             _camera = Camera.Open();
             
-            _textureView.LayoutParameters = new FrameLayout.LayoutParams(w, h);
+            _textureView.LayoutParameters = new FrameLayout.LayoutParams(h, w);
 
             try
             {
@@ -47,7 +47,10 @@ namespace CaffeineTracker
                 Console.WriteLine(ex.Message);
                 
             }
-            
+
+            _textureView.Rotation = 90.0f;
+            _textureView.TranslationX = -300f;
+
         }
 
         public bool OnSurfaceTextureDestroyed(Android.Graphics.SurfaceTexture surface)
