@@ -24,14 +24,18 @@ namespace CaffeineTracker
 
 		protected override void OnCreate(Bundle bundle)
 		{
+			RequestWindowFeature(WindowFeatures.NoTitle);
 			base.OnCreate(bundle);
 
-			_textureView = new TextureView(this)
-			{
-				SurfaceTextureListener = this
-			};
+			SetContentView(Resource.Layout.Activity1);
+			_textureView = FindViewById<TextureView>(Resource.Id.textureView1);
+			_textureView.SurfaceTextureListener = this;
 
-			SetContentView(_textureView);
+			var button = FindViewById<Button>(Resource.Id.backButton);
+			button.Click += delegate
+			{
+				
+			};
 		}
 
 		public void OnSurfaceTextureAvailable(SurfaceTexture surface, int w, int h)
@@ -42,12 +46,13 @@ namespace CaffeineTracker
 			{
 				param.FocusMode = Camera.Parameters.FocusModeContinuousVideo;
 			}
+			
 			_camera.SetParameters(param);
-			_textureView.LayoutParameters = new FrameLayout.LayoutParams(w, w);
-			_camera.SetPreviewTexture(surface);
+			_camera.SetPreviewTexture(_textureView.SurfaceTexture);
 			_camera.StartPreview();
 			_textureView.Rotation = 90.0f;
 			_textureView.ScaleX = (float)h / w;
+			_textureView.ScaleY = (float)w / h;
 		}
 
 		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
