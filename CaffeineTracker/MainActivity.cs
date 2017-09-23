@@ -13,13 +13,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Environment = Android.OS.Environment;
 using Android.Views;
+using System.Threading.Tasks;
 
 namespace CaffeineTracker
 {
 	[Activity(Label = "Caffeine Tracker", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
-		private string Key => Encoding.ASCII.GetString(Convert.FromBase64String("QUl6YVN5QXJ2WUk3cjh1SHhwMTh3enlkeU4wX1YyMHI3TEpTR0FJ"));
+		public static string Key => Encoding.ASCII.GetString(Convert.FromBase64String("QUl6YVN5QXJ2WUk3cjh1SHhwMTh3enlkeU4wX1YyMHI3TEpTR0FJ"));
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -31,20 +32,6 @@ namespace CaffeineTracker
 			var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar1);
 			SetActionBar(toolbar);
 			ActionBar.Title = "Caffeine Tracker";
-		}
-
-		internal Drink[] LoadDrinks()
-		{
-			var _csv = Assets.Open("Drinks.csv");
-			var reader = new StreamReader(_csv);
-			var csv = reader.ReadToEnd().Split('\n');
-			var drinks = new List<Drink>();
-			foreach (var line in csv)
-			{
-				var a = line.Split('~');
-				drinks.Add(Drink.Deserialize(a));
-			}
-			return drinks.ToArray();
 		}
 
 		public override bool OnCreateOptionsMenu(IMenu menu)
@@ -63,33 +50,12 @@ namespace CaffeineTracker
 			return base.OnOptionsItemSelected(item);
 		}
 
-		private async void ParseResponse(byte[] image)
-		{
-			var vw = new VisionWrapper(Key);
-			var requests = vw.BuildRequest(vw.ToBase64(image));
-			var responses = new[] { await vw.GetResponse(requests[0]), await vw.GetResponse(requests[1]) };
-			var response = string.Join("\n", responses);
-			var buzz = Regex.Matches(response, "\"description\": \"(.*?)\"", RegexOptions.Singleline).Cast<Match>().Select(_ => _.Groups[1].Value).ToArray();
-			var oldMatches = LoadDrinks();
-			foreach (var b in buzz)
-			{
-				var newMatches = oldMatches.Where(_ => _.Name.Contains(b)).ToArray();
-				if (newMatches.Length == 0) break;
-				oldMatches = newMatches;
-				if (newMatches.Length <= 3) break;
-			}
-			if (oldMatches.Length > 100) oldMatches = null;
-			var intent = new Intent(this, typeof(AddDrink));
-			intent.PutExtra("data", oldMatches is null ? new string[0] : oldMatches.Select(_ => _.Name).Take(10).ToArray());
-			StartActivityForResult(intent, 1);
-		}
-
 		protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
 		{
-			if (resultCode == Result.Ok)
+			if (requestCode == 1)
 			{
-				if (requestCode == 0) ParseResponse(data.GetByteArrayExtra("image"));
-				else if (requestCode == 1) ;
+				
+
 			}
 			base.OnActivityResult(requestCode, resultCode, data);
 		}

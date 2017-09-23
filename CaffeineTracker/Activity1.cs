@@ -13,6 +13,9 @@ using Android.Views;
 using Android.Widget;
 using Java.Security;
 using Camera = Android.Hardware.Camera;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.Threading;
 
 namespace CaffeineTracker
 {
@@ -40,7 +43,8 @@ namespace CaffeineTracker
 				_camera.TakePicture(this, this, this);
 			};
 
-			_textureView.Click += delegate {
+			_textureView.Click += delegate
+			{
 				_camera.CancelAutoFocus();
 				Camera.Parameters param = _camera.GetParameters();
 				if (!manualFocus && param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeFixed))
@@ -76,7 +80,6 @@ namespace CaffeineTracker
 
 		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
 		{
-			_camera.Release();
 			return true;
 		}
 
@@ -90,19 +93,80 @@ namespace CaffeineTracker
 
 		}
 
+		private async void ParseResponse(byte[] image)
+		{
+			var vw = new VisionWrapper(MainActivity.Key);
+			var requests = vw.BuildRequest(vw.ToBase64(image));
+			var responses = new[] { await vw.GetResponse(requests[0]), await vw.GetResponse(requests[1]) };
+			var response = string.Join("\n", responses);
+			var buzz = Regex.Matches(response, "\"description\": \"(.*?)\"", RegexOptions.Singleline).Cast<Match>().Select(_ => _.Groups[1].Value).ToArray();
+			var oldMatches = LoadDrinks();
+			foreach (var b in buzz)
+			{
+				var newMatches = oldMatches.Where(_ => _.Name.Contains(b)).ToArray();
+				if (newMatches.Length == 0) break;
+				oldMatches = newMatches;
+				if (newMatches.Length <= 3) break;
+			}
+			if (oldMatches.Length > 100) oldMatches = null;
+			d.Dismiss();
+			var intent = new Intent(this, typeof(AddDrink));
+			intent.PutExtra("data", oldMatches is null ? new string[0] : oldMatches.Select(_ => _.Name).Take(10).ToArray());
+			StartActivityForResult(intent, 1);
+		}
+
+		protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+		{
+			if (resultCode == Result.Canceled)
+			{
+				var ad = new AlertDialog.Builder(this);
+				ad.SetMessage("The beverage you photographed could not be identified.\n\nTry another angle or better lighting.");
+				ad.SetTitle("Unknown Beverage");
+				ad.SetPositiveButton("Okay", delegate {
+					SetResult(requestCode == 0 ? Result.Canceled : resultCode, data);
+					Finish();
+					base.OnActivityResult(requestCode, resultCode, data);
+				});
+				ad.SetCancelable(false);
+				ad.Create().Show();
+			}
+		}
+
+		internal Drink[] LoadDrinks()
+		{
+			var _csv = Assets.Open("Drinks.csv");
+			var reader = new StreamReader(_csv);
+			var csv = reader.ReadToEnd().Split('\n');
+			var drinks = new List<Drink>();
+			foreach (var line in csv)
+			{
+				var a = line.Split('~');
+				drinks.Add(Drink.Deserialize(a));
+			}
+			return drinks.ToArray();
+		}
+
+		ProgressDialog d;
 		public void OnShutter() { }
 		public void OnPictureTaken(byte[] data, Camera camera)
 		{
-			if (data is null)
-			{
-				return;
-			}
+			if (data is null) { return; }
 			else
 			{
-				var intent = new Intent(this, typeof(MainActivity));
-				intent.PutExtra("image", data);
-				SetResult(Result.Ok, intent);
-				Finish();
+				d = new ProgressDialog(this);
+				d.SetCancelable(false);
+				d.SetMessage("Looking for caffinated beverages ...");
+				d.Indeterminate = true;
+				d.SetCanceledOnTouchOutside(false);
+				d.SetProgressStyle(ProgressDialogStyle.Spinner);
+				d.Create();
+				d.Show();
+				//var intent = new Intent(this, typeof(MainActivity));
+				//intent.PutExtra("image", data);
+				//SetResult(Result.Ok, intent);
+				//Finish();
+				new Thread(() => ParseResponse(data)).Start();
+				_camera.Release();
 			}
 		}
 	}
