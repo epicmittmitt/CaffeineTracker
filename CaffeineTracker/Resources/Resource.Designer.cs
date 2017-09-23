@@ -44,9 +44,6 @@ namespace CaffeineTracker
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int imageView1 = 2130968577;
-			
 			// aapt resource value: 0x7f040000
 			public const int myButton = 2130968576;
 			
