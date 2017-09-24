@@ -18,7 +18,7 @@ namespace CaffeineTracker
 		DetailedDrink[] _drinks;
 		Activity _context;
 
-		public HSLV(Activity context, List<DetailedDrink> drinks) : base()
+		public HSLV(Activity context, DetailedDrink[] drinks) : base()
 		{
 			_context = context;
 			_drinks = drinks;
@@ -26,14 +26,15 @@ namespace CaffeineTracker
 
 		public override long GetItemId(int position) => position;
 
+		public override Java.Lang.Object GetItem(int position) => position;
+
 		public override View GetView(int position, View convertView, ViewGroup parent)
 		{
 			var drink = _drinks[position];
 			var view = convertView;
 			if (view is null) view = _context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, parent, false);
-			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = drink.Name;
-			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = drink.ComputeCaffeine + " gm left of " + drink.Caffeine + " gm";
-			//view.FindViewById<TextView>(Resource.Id.Text2).Text = TimeSpan.FromHours(drink.ComputeTime).ToString();
+			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = _drinks[position].Name;
+			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = _drinks[position].ComputeCaffeine + " / " + _drinks[position].Caffeine + TimeSpan.FromHours(_drinks[position].ComputeTime).ToString();
 			return view;
 		}
 
