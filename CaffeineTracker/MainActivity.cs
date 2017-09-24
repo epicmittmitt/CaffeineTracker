@@ -64,7 +64,7 @@ namespace CaffeineTracker {
 
         private void UpdateListView() {
 			var drinks = Read().ToList();
-			adapter._drinks = drinks;
+			adapter._drinks.Clear();
 			adapter.NotifyDataSetChanged();
 		}
 

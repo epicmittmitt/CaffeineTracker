@@ -22,8 +22,6 @@ namespace CaffeineTracker
 			_drinks = drinks;
 		}
 
-		public override Java.Lang.Object GetItem(int position) => position;
-
 		public override long GetItemId(int position) => position;
 
 		public override View GetView(int position, View convertView, ViewGroup parent)
