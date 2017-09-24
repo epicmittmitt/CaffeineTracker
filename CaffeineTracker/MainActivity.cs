@@ -34,6 +34,7 @@ namespace CaffeineTracker {
             ActionBar.Title = "Caffeine Tracker";
 
 			lv = FindViewById<ListView>(Resource.Id.listView4);
+			adapter = new HSLV(this, null);
 			UpdateListView();
 
 			timer = new Timer { AutoReset = true, Interval = 10000 };
@@ -82,12 +83,12 @@ namespace CaffeineTracker {
         }
 
 		ListView lv;
+		HSLV adapter;
 
         private void UpdateListView() {
-			var drinks = Read().ToArray();
-            lv.Adapter = new HSLV(this, drinks);
-			//lv.ItemClick += (s, e) => { };
-			//lv.ItemLongClick += (s, e) => { };
+			var drinks = Read().ToList();
+			adapter._drinks = drinks;
+			adapter.NotifyDataSetChanged();
 		}
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data) {
@@ -107,7 +108,6 @@ namespace CaffeineTracker {
 			while (!raw.EndOfStream) yield return DetailedDrink.Deserialize(raw.ReadLine().Split('~'));
 			raw.Close();
 			raw.Dispose();
-			file.Flush();
 			file.Close();
 			file.Dispose();
 		}
