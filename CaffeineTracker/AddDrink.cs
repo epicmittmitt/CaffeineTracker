@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace CaffeineTracker
 {

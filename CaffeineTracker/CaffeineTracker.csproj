@@ -57,6 +57,7 @@
     <Compile Include="Activity1.cs" />
     <Compile Include="AddDrink.cs" />
     <Compile Include="Drink.cs" />
+    <Compile Include="HSLV.cs" />
     <Compile Include="LVAdapter.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +73,9 @@
     <None Include="Assets\AboutAssets.txt" />
     <AndroidAsset Include="Assets\Drinks.csv" />
     <AndroidResource Include="Resources\layout\AddDrinkDialog.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\HomeScreenLV.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

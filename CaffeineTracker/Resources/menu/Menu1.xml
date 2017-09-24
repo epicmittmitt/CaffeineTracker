@@ -7,6 +7,10 @@
         android:title="Add an Image"
         android:icon="@drawable/ic_add_a_photo_white_24dp" />
 
+  <item android:id="@+id/resetStats"
+        android:showAsAction="never"
+        android:title="Reset" />
+
 </menu>
 
 <!-- Code to implement into Activity:

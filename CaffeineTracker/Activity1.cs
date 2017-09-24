@@ -78,20 +78,11 @@ namespace CaffeineTracker
 			_textureView.ScaleY = (float)w / h;
 		}
 
-		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
-		{
-			return true;
-		}
+		public bool OnSurfaceTextureDestroyed(SurfaceTexture surface) => true;
 
-		public void OnSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height)
-		{
+		public void OnSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) { }
 
-		}
-
-		public void OnSurfaceTextureUpdated(SurfaceTexture surface)
-		{
-
-		}
+		public void OnSurfaceTextureUpdated(SurfaceTexture surface) { }
 
 		private async void ParseResponse(byte[] image)
 		{
@@ -99,19 +90,17 @@ namespace CaffeineTracker
 			var requests = vw.BuildRequest(vw.ToBase64(image));
 			var responses = new[] { await vw.GetResponse(requests[0]), await vw.GetResponse(requests[1]) };
 			var response = string.Join("\n", responses);
-			var buzz = Regex.Matches(response, "\"description\": \"(.*?)\"", RegexOptions.Singleline).Cast<Match>().Select(_ => _.Groups[1].Value).ToArray();
-			var oldMatches = LoadDrinks();
+			var buzz = Regex.Matches(response, "\"description\": \"([A-Z a-z'\\(\\)0-9\\.\\-\\+]+)\"", RegexOptions.Singleline).Cast<Match>().Select(_ => _.Groups[1].Value).ToArray();
+			var drinks = LoadDrinks();
+			var matches = new List<Drink>();
+			var i = 0;
 			foreach (var b in buzz)
 			{
-				var newMatches = oldMatches.Where(_ => _.Name.Contains(b)).ToArray();
-				if (newMatches.Length == 0) break;
-				oldMatches = newMatches;
-				if (newMatches.Length <= 3) break;
+				matches.AddRange(drinks.Where(_ => _.Name.ToLower().Contains(b.ToLower())));
 			}
-			if (oldMatches.Length > 100) oldMatches = null;
 			d.Dismiss();
 			var intent = new Intent(this, typeof(AddDrink));
-			intent.PutExtra("data", oldMatches is null ? new string[0] : oldMatches.Select(_ => _.Name).Take(10).ToArray());
+			intent.PutExtra("data", matches.Distinct().Take(25).Select(_ => _.Name).ToArray());
 			StartActivityForResult(intent, 1);
 		}
 
@@ -123,7 +112,8 @@ namespace CaffeineTracker
 				var ad = new AlertDialog.Builder(this);
 				ad.SetMessage("The beverage you photographed could not be identified.\n\nTry another angle or better lighting.");
 				ad.SetTitle("Unknown Beverage");
-				ad.SetPositiveButton("Okay", delegate {
+				ad.SetPositiveButton("Okay", delegate
+				{
 					SetResult(Result.Canceled, data);
 					Finish();
 				});
@@ -135,18 +125,11 @@ namespace CaffeineTracker
 			Finish();
 		}
 
-		internal Drink[] LoadDrinks()
+		internal IEnumerable<Drink> LoadDrinks()
 		{
-			var _csv = Assets.Open("Drinks.csv");
-			var reader = new StreamReader(_csv);
-			var csv = reader.ReadToEnd().Split('\n');
+			var reader = new StreamReader(Assets.Open("Drinks.csv"));
 			var drinks = new List<Drink>();
-			foreach (var line in csv)
-			{
-				var a = line.Split('~');
-				drinks.Add(Drink.Deserialize(a));
-			}
-			return drinks.ToArray();
+			while (!reader.EndOfStream) yield return Drink.Deserialize(reader.ReadLine().Split('~'));
 		}
 
 		ProgressDialog d;
@@ -164,10 +147,6 @@ namespace CaffeineTracker
 				d.SetProgressStyle(ProgressDialogStyle.Spinner);
 				d.Create();
 				d.Show();
-				//var intent = new Intent(this, typeof(MainActivity));
-				//intent.PutExtra("image", data);
-				//SetResult(Result.Ok, intent);
-				//Finish();
 				new Thread(() => ParseResponse(data)).Start();
 				_camera.Release();
 			}

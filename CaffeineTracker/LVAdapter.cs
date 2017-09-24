@@ -30,7 +30,7 @@ namespace CaffeineTracker
 		{
 			var view = convertView;
 			if (view is null) view = _context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, parent, false);
-			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = _drinks[position].Name;	
+			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = System.Net.WebUtility.UrlDecode(_drinks[position].Name);	
 			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = _drinks[position].Caffeine + " mg";
 			return view;
 		}
