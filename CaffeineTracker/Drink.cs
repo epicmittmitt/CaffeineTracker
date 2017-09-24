@@ -41,15 +41,6 @@ namespace CaffeineTracker {
 
         public double ComputeCaffeine => Caffeine * Math.Pow(0.5, (DateTime.Now - TimeOfConsumption).TotalHours / 6.0);
 
-        public double ComputeTime {
-            get {
-                double t = 0.0, c = ComputeCaffeine;
-                while (c > 0.05 * 400) {
-                    t += 6;
-                    c /= 2;
-                }
-                return t;
-            }
-        }
-    }
+		public double ComputeTime => 6 * Math.Log(100 / Caffeine) / Math.Log(0.5);
+	}
 }

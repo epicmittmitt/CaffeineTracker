@@ -108,7 +108,6 @@ namespace CaffeineTracker
 
 		protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
 		{
-			base.OnActivityResult(requestCode, resultCode, data);
 			if (resultCode == Result.Canceled)
 			{
 				var ad = new AlertDialog.Builder(this);
@@ -125,6 +124,7 @@ namespace CaffeineTracker
 			}
 			SetResult(Result.Ok, data);
 			Finish();
+			base.OnActivityResult(requestCode, resultCode, data);
 		}
 
 		internal IEnumerable<Drink> LoadDrinks()

@@ -19,12 +19,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/Title"
         android:id="@+id/Text1" />
-    <TextView
+    <!--<TextView
         android:text="00:00:00"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignBaseline="@id/Text1"
-        android:id="@+id/Text2" />
+        android:id="@+id/Text2" 
+        android:visibility="invisible"/>-->
 </RelativeLayout>

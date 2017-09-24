@@ -73,7 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout4"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
         <TextView
             android:text="Time Remaining:"
             android:id="@+id/textView4"
@@ -91,6 +92,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </LinearLayout>
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar1"
+        android:layout_gravity="center" />
     <TextView
         android:text="Disclaimer: The information provided is not indended to be a substitute for professional medical advice. For further questions, please consult a medical professional."
         android:layout_width="match_parent"
@@ -104,9 +111,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView4" />
-<!--<ImageView
-        android:src="@android:drawable/ic_menu_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView1" />-->
 </LinearLayout>
