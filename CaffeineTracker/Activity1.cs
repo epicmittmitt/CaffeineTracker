@@ -47,9 +47,9 @@ namespace CaffeineTracker
 			{
 				_camera.CancelAutoFocus();
 				Camera.Parameters param = _camera.GetParameters();
-				if (!manualFocus && param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeFixed))
+				if (!manualFocus && param.SupportedFocusModes.Contains(Camera.Parameters.FocusModeMacro))
 				{
-					param.FocusMode = Camera.Parameters.FocusModeFixed;
+					param.FocusMode = Camera.Parameters.FocusModeMacro;
 				}
 				manualFocus = !manualFocus;
 				_camera.SetParameters(param);
@@ -66,7 +66,8 @@ namespace CaffeineTracker
 			{
 				param.FocusMode = Camera.Parameters.FocusModeContinuousPicture;
 			}
-			var dimensions = 480 * 768;
+			param.SetRotation(90);
+			var dimensions = 720 * 1280;
 			var size = param.SupportedPictureSizes.Where(_ => _.Width * _.Height < dimensions).OrderByDescending(_ => _.Width * _.Height < dimensions).First();
 			param.SetPictureSize(size.Width, size.Height);
 
@@ -100,7 +101,7 @@ namespace CaffeineTracker
 			}
 			d.Dismiss();
 			var intent = new Intent(this, typeof(AddDrink));
-			intent.PutExtra("data", matches.Distinct().Take(25).Select(_ => _.Name).ToArray());
+			intent.PutExtra("data", matches.Distinct().Take(15).Select(_ => _.Name).ToArray());
 			StartActivityForResult(intent, 1);
 		}
 

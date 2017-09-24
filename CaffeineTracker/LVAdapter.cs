@@ -29,9 +29,10 @@ namespace CaffeineTracker
 		public override View GetView(int position, View convertView, ViewGroup parent)
 		{
 			var view = convertView;
+			var drink = _drinks[position];
 			if (view is null) view = _context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, parent, false);
-			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = System.Net.WebUtility.UrlDecode(_drinks[position].Name);	
-			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = _drinks[position].Caffeine + " mg";
+			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = System.Net.WebUtility.UrlDecode(drink.Name);	
+			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = drink.Caffeine + " mg";
 			return view;
 		}
 

@@ -60,6 +60,15 @@ namespace CaffeineTracker
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f060004
+			public const int Text1 = 2131099652;
+			
+			// aapt resource value: 0x7f060005
+			public const int Text2 = 2131099653;
+			
+			// aapt resource value: 0x7f060003
+			public const int Title = 2131099651;
+			
 			// aapt resource value: 0x7f060000
 			public const int backButton = 2131099648;
 			
@@ -79,7 +88,7 @@ namespace CaffeineTracker
 			public const int listView1 = 2131099650;
 			
 			// aapt resource value: 0x7f060012
-			public const int listView2 = 2131099666;
+			public const int listView4 = 2131099666;
 			
 			// aapt resource value: 0x7f060013
 			public const int openCamera = 2131099667;
@@ -89,15 +98,6 @@ namespace CaffeineTracker
 			
 			// aapt resource value: 0x7f060008
 			public const int textView1 = 2131099656;
-			
-			// aapt resource value: 0x7f060003
-			public const int textView11 = 2131099651;
-			
-			// aapt resource value: 0x7f060004
-			public const int textView13 = 2131099652;
-			
-			// aapt resource value: 0x7f060005
-			public const int textView14 = 2131099653;
 			
 			// aapt resource value: 0x7f060009
 			public const int textView2 = 2131099657;

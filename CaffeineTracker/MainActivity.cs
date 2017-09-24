@@ -20,8 +20,10 @@ namespace CaffeineTracker {
     [Activity(Label = "Caffeine Tracker", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity {
         public static string Key => Encoding.ASCII.GetString(Convert.FromBase64String("QUl6YVN5QXJ2WUk3cjh1SHhwMTh3enlkeU4wX1YyMHI3TEpTR0FJ"));
+		public static string HistoryPath => /*System.IO.Path.Combine(System.Environment.CurrentDirectory,*/ "/sdcard/Documents/history.csv" /*System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "history.csv")*/;
 
-        protected override void OnCreate(Bundle savedInstanceState) {
+
+		protected override void OnCreate(Bundle savedInstanceState) {
             RequestWindowFeature(WindowFeatures.NoTitle);
             Window.AddFlags(WindowManagerFlags.ForceNotFullscreen);
             SetContentView(Resource.Layout.Main);
@@ -31,9 +33,12 @@ namespace CaffeineTracker {
             SetActionBar(toolbar);
             ActionBar.Title = "Caffeine Tracker";
 
-            timer = new Timer { AutoReset = true, Interval = 1000 };
-            //timer.Elapsed += (s, e) => UpdateListView();
-            StartTimer();
+			lv = FindViewById<ListView>(Resource.Id.listView4);
+			UpdateListView();
+
+			timer = new Timer { AutoReset = true, Interval = 10000 };
+			timer.Elapsed += (s, e) => UpdateListView();
+			StartTimer();
         }
 
         private Timer timer;
@@ -71,52 +76,54 @@ namespace CaffeineTracker {
             if (item.TitleFormatted.ToString() == "Add an Image") {
                 StartActivityForResult(typeof(Activity1), 0);
             } else {
-				//File.Delete(System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "history.csv"));
+				File.Delete(HistoryPath);
             }
             return base.OnOptionsItemSelected(item);
         }
 
+		ListView lv;
+
         private void UpdateListView() {
-            var drinks = Read();
-            var lv = FindViewById<ListView>(Resource.Id.listView2);
-            lv.Adapter = new HSLV(this, drinks.ToArray());
-            lv.ItemClick += (s, e) => { };
-            lv.ItemLongClick += (s, e) => { };
-        }
+			Console.WriteLine("Start Update");
+			var drinks = Read().ToArray();
+            lv.Adapter = new HSLV(this, drinks);
+			//lv.ItemClick += (s, e) => { };
+			//lv.ItemLongClick += (s, e) => { };
+			Console.WriteLine($"End Update {drinks.Length}");
+		}
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data) {
             //if (requestCode == 1) {
                 if (resultCode == Result.Ok) {
-                    var _d = Drink.Deserialize(data.GetStringArrayExtra("data"));
+					Console.WriteLine("Start Results");
+					var _d = Drink.Deserialize(data.GetStringArrayExtra("data"));
                     var d = DetailedDrink.ToDetailedDrink(_d);
                     Write(new[] { d });
                     UpdateListView();
-                }
+					Console.WriteLine("End Results");
+				}
             //}
             base.OnActivityResult(requestCode, resultCode, data);
         }
 
         internal IEnumerable<DetailedDrink> Read() {
-			var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "history.csv");
-			if (!File.Exists(path)) File.WriteAllText(path, string.Empty);
-			var file = File.OpenRead(path);
+			Console.WriteLine("Start Read");
+			if (!File.Exists(HistoryPath)) File.WriteAllText(HistoryPath, string.Empty);
+			var file = File.OpenRead(HistoryPath);
 			var raw = new StreamReader(file);
 			while (!raw.EndOfStream) yield return DetailedDrink.Deserialize(raw.ReadLine().Split('~'));
-			raw.Close();
-			raw.Dispose();
-			file.Close();
-			file.Dispose();
-        }
+			Console.WriteLine("End Read");
+
+		}
 
         internal void Write(DetailedDrink[] drinks) {
+			Console.WriteLine("Start Write");
             var _output = Read().ToList();
             _output.AddRange(drinks);
-            var output = new List<string>();
-            var writer = new StreamWriter(System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "history.csv"));
-            foreach (var drink in _output) writer.WriteLine(string.Join("~", DetailedDrink.Serialize(drink)));
-            writer.Close();
-            writer.Dispose();
-        }
+			
+			Console.WriteLine("End Write");
+
+		}
 
         public static int GetDamerauLevenshteinDistance(string s, string t) {
             var bounds = new { Height = s.Length + 1, Width = t.Length + 1 };

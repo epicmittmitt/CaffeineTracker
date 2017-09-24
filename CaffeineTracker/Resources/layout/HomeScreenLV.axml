@@ -11,20 +11,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:id="@+id/textView11" />
+        android:id="@+id/Title" />
     <TextView
         android:text="Current / Total"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView11"
-        android:id="@+id/textView13" />
+        android:layout_below="@id/Title"
+        android:id="@+id/Text1" />
     <TextView
         android:text="00:00:00"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@id/textView13"
-        android:id="@+id/textView14" />
+        android:layout_alignBaseline="@id/Text1"
+        android:id="@+id/Text2" />
 </RelativeLayout>
