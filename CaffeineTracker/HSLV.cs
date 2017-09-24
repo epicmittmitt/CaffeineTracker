@@ -18,10 +18,10 @@ namespace CaffeineTracker
 		public List<DetailedDrink> _drinks = new List<DetailedDrink>();
 		Activity _context;
 
-		public HSLV(Activity context, DetailedDrink[] drinks) : base()
+		public HSLV(Activity context, List<DetailedDrink> drinks) : base()
 		{
 			_context = context;
-			_drinks.AddRange(drinks);
+			/*if (drinks != null)*/ _drinks.AddRange(drinks);
 		}
 
 		public override long GetItemId(int position) => position;
@@ -33,9 +33,9 @@ namespace CaffeineTracker
 			var drink = _drinks[position];
 			var view = convertView;
 			if (view is null) view = _context.LayoutInflater.Inflate(Resource.Layout.HomeScreenLV, parent, false);
-			view.FindViewById<TextView>(Resource.Id.Title).Text = _drinks[position].Name;
-			view.FindViewById<TextView>(Resource.Id.Text1).Text = _drinks[position].ComputeCaffeine + " / " + _drinks[position].Caffeine;
-			view.FindViewById<TextView>(Resource.Id.Text2).Text = TimeSpan.FromHours(_drinks[position].ComputeTime).ToString();
+			view.FindViewById<TextView>(Resource.Id.Title).Text = drink.Name;
+			view.FindViewById<TextView>(Resource.Id.Text1).Text = drink.ComputeCaffeine + " gm left of " + drink.Caffeine + " gm";
+			view.FindViewById<TextView>(Resource.Id.Text2).Text = TimeSpan.FromHours(drink.ComputeTime).ToString();
 			return view;
 		}
 

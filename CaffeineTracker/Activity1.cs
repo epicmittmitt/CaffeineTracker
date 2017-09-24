@@ -39,6 +39,7 @@ namespace CaffeineTracker
 			var button = FindViewById<Button>(Resource.Id.backButton);
 			button.Click += delegate
 			{
+				button.Enabled = false;
 				stopImaging = true;
 				_camera.TakePicture(this, this, this);
 			};
