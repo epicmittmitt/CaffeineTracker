@@ -32,9 +32,10 @@ namespace CaffeineTracker
 		{
 			var drink = _drinks[position];
 			var view = convertView;
-			if (view is null) view = _context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, parent, false);
-			view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = _drinks[position].Name;
-			view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = _drinks[position].ComputeCaffeine + " / " + _drinks[position].Caffeine + TimeSpan.FromHours(_drinks[position].ComputeTime).ToString();
+			if (view is null) view = _context.LayoutInflater.Inflate(Resource.Layout.HomeScreenLV, parent, false);
+			view.FindViewById<TextView>(Resource.Id.Title).Text = _drinks[position].Name;
+			view.FindViewById<TextView>(Resource.Id.Text1).Text = _drinks[position].ComputeCaffeine + " / " + _drinks[position].Caffeine;
+			view.FindViewById<TextView>(Resource.Id.Text2).Text = TimeSpan.FromHours(_drinks[position].ComputeTime).ToString();
 			return view;
 		}
 
