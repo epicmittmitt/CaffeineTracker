@@ -82,16 +82,16 @@ namespace CaffeineTracker
 
 		public override bool OnOptionsItemSelected(IMenuItem item)
 		{
-			//if (item.ItemId == Resource.Id.openCamera)
-			//{
-			StartActivityForResult(typeof(Activity1), 0);
-			//}
-			//else if (item.ItemId == Resource.Id.resetStats)
-			//{
-			//	Console.WriteLine("DELETED");
-			//	//File.Delete(HistoryPath);
-			//	UpdateListView();
-			//}
+			if (item.ItemId == Resource.Id.openCamera)
+			{
+				StartActivityForResult(typeof(Activity1), 0);
+		}
+			else if (item.ItemId == Resource.Id.resetStats)
+			{
+				Console.WriteLine("DELETED");
+				File.Delete(HistoryPath);
+				UpdateListView();
+	}
 			return base.OnOptionsItemSelected(item);
 		}
 
