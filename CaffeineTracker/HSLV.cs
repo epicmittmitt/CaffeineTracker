@@ -15,13 +15,13 @@ namespace CaffeineTracker
 {
 	class HSLV : BaseAdapter<Drink>
 	{
-		public List<DetailedDrink> _drinks = new List<DetailedDrink>();
+		DetailedDrink[] _drinks;
 		Activity _context;
 
 		public HSLV(Activity context, List<DetailedDrink> drinks) : base()
 		{
 			_context = context;
-			_drinks.AddRange(drinks);
+			_drinks = drinks;
 		}
 
 		public override long GetItemId(int position) => position;
@@ -38,6 +38,6 @@ namespace CaffeineTracker
 		}
 
 		public override Drink this[int position] => _drinks[position];
-		public override int Count => /*_drinks is null ? 0 :*/ _drinks.Count;
+		public override int Count => /*_drinks is null ? 0 :*/ _drinks.Length;
 	}
 }

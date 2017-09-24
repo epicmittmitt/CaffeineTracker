@@ -20,7 +20,7 @@ namespace CaffeineTracker {
     [Activity(Label = "Caffeine Tracker", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity {
         public static string Key => Encoding.ASCII.GetString(Convert.FromBase64String("QUl6YVN5QXJ2WUk3cjh1SHhwMTh3enlkeU4wX1YyMHI3TEpTR0FJ"));
-		public static string HistoryPath => "/sdcard/Documents/history.csv";
+		public static string HistoryPath => /*System.IO.Path.Combine(System.Environment.CurrentDirectory, "/sdcard/Documents/history.csv"*/ System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "history.csv");
 
 
 		protected override void OnCreate(Bundle savedInstanceState) {
@@ -34,17 +34,39 @@ namespace CaffeineTracker {
             ActionBar.Title = "Caffeine Tracker";
 
 			lv = FindViewById<ListView>(Resource.Id.listView4);
-			var drinks = Read().ToList();
-			adapter = new HSLV(this, drinks);
+			UpdateListView();
+
+			timer = new Timer { AutoReset = true, Interval = 10000 };
+			timer.Elapsed += (s, e) => UpdateListView();
+			StartTimer();
         }
 
-		protected override void OnResume()
-		{
-			UpdateListView();
-			base.OnResume();
-		}
+        private Timer timer;
 
-		public override bool OnCreateOptionsMenu(IMenu menu) {
+        protected override void OnDestroy() {
+            timer.Stop();
+            timer.Dispose();
+            base.OnDestroy();
+        }
+
+        protected override void OnPause() {
+            timer.Stop();
+            base.OnPause();
+        }
+
+        protected override void OnRestart() {
+            StartTimer();
+            base.OnRestart();
+        }
+
+        protected override void OnResume() {
+            StartTimer();
+            base.OnResume();
+        }
+
+        private void StartTimer() => timer.Start();
+
+        public override bool OnCreateOptionsMenu(IMenu menu) {
             MenuInflater.Inflate(Resource.Menu.Menu1, menu);
             var openCamera = menu.FindItem(Resource.Id.openCamera);
             return base.OnCreateOptionsMenu(menu);
@@ -54,18 +76,18 @@ namespace CaffeineTracker {
             if (item.TitleFormatted.ToString() == "Add an Image") {
                 StartActivityForResult(typeof(Activity1), 0);
             } else {
-				//File.Delete(HistoryPath);
+				File.Delete(HistoryPath);
             }
             return base.OnOptionsItemSelected(item);
         }
 
 		ListView lv;
-		HSLV adapter;
 
         private void UpdateListView() {
-			var drinks = Read().ToList();
-			adapter._drinks.Clear();
-			adapter.NotifyDataSetChanged();
+			var drinks = Read().ToArray();
+            lv.Adapter = new HSLV(this, drinks);
+			//lv.ItemClick += (s, e) => { };
+			//lv.ItemLongClick += (s, e) => { };
 		}
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data) {
@@ -80,23 +102,27 @@ namespace CaffeineTracker {
 
         internal IEnumerable<DetailedDrink> Read() {
 			if (!File.Exists(HistoryPath)) File.WriteAllText(HistoryPath, string.Empty);
-			var lines = File.ReadAllLines(HistoryPath);
-			return lines.Select(_ => DetailedDrink.Deserialize(_.Split('~')));
-			//using (var file = File.OpenRead(HistoryPath))
-			//using (var raw = new StreamReader(file))
-			//	while (!raw.EndOfStream) yield return DetailedDrink.Deserialize(raw.ReadLine().Split('~'));
+			var file = File.OpenRead(HistoryPath);
+			var raw = new StreamReader(file);
+			while (!raw.EndOfStream) yield return DetailedDrink.Deserialize(raw.ReadLine().Split('~'));
+			raw.Close();
+			raw.Dispose();
+			file.Flush();
+			file.Close();
+			file.Dispose();
 		}
 
         internal void Write(DetailedDrink[] drinks) {
-			var lines = Read().ToList();
-			lines.AddRange(drinks);
-			var output = lines.Select(_ => string.Join("~", DetailedDrink.Serialize(_)));
-			File.WriteAllLines(HistoryPath, output);
-   //         var _output = Read().ToList();
-   //         _output.AddRange(drinks);
-			//using (var file = File.OpenWrite(HistoryPath))
-			//using (var raw = new StreamWriter(file) { AutoFlush = true })
-			//	foreach (var output in _output) raw.WriteLine(string.Join("~", DetailedDrink.Serialize(output)));
+            var _output = Read().ToList();
+            _output.AddRange(drinks);
+			var file = File.OpenWrite(HistoryPath);
+			var raw = new StreamWriter(file);
+			foreach (var output in _output) raw.WriteLine(string.Join("~", DetailedDrink.Serialize(output)));
+			raw.Flush();
+			raw.Close();
+			raw.Dispose();
+			file.Close();
+			file.Dispose();
 		}
 
         public static int GetDamerauLevenshteinDistance(string s, string t) {
