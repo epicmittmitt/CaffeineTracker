@@ -79,9 +79,9 @@ namespace CaffeineTracker {
         }
 
         internal IEnumerable<DetailedDrink> Read() {
+			if (!File.Exists(HistoryPath)) File.WriteAllText(HistoryPath, string.Empty);
 			var lines = File.ReadAllLines(HistoryPath);
 			return lines.Select(_ => DetailedDrink.Deserialize(_.Split('~')));
-			//if (!File.Exists(HistoryPath)) File.WriteAllText(HistoryPath, string.Empty);
 			//using (var file = File.OpenRead(HistoryPath))
 			//using (var raw = new StreamReader(file))
 			//	while (!raw.EndOfStream) yield return DetailedDrink.Deserialize(raw.ReadLine().Split('~'));
